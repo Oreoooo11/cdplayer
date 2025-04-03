@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古风 CD 机</title>
+    <style>
+        body {
+            /* 若要插入本地背景图片，修改此处 url 为本地图片路径，如 url('background.jpg') */
+            background-image: url('329.jpg');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'SimSun', serif;
+        }
+
+        .cd-player {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cd {
+            width: 200px;
+            height: 200px;
+            /* 若要插入本地 CD 封面图片，修改此处 url 为本地图片路径，如 url('cd_cover.jpg') */
+            background-image: url('flower.jpg');
+            background-size: cover;
+            border-radius: 50%;
+            animation: rotate 10s linear infinite paused;
+            margin-bottom: 20px;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .lyrics {
+            width: 300px;
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .lyrics p {
+            position: absolute;
+            top: 100%;
+            animation: scroll 20s linear infinite paused;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        @keyframes scroll {
+            from {
+                top: 100%;
+            }
+            to {
+                top: -100%;
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'SimSun', serif;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="cd-player">
+        <div class="cd"></div>
+        <div class="lyrics">
+            <p>此歌曲为纯音乐 无歌词 请欣赏</p>
+        </div>
+        <div class="controls">
+            <button id="play-pause">播放</button>
+        </div>
+    </div>
+    <!-- 若要插入本地音乐文件，修改此处 src 为本地音乐文件路径，如 src='music.mp3' -->
+    <audio id="midi-audio" src="cdplayer.mp3"></audio>
+    <script>
+        const cd = document.querySelector('.cd');
+        const lyrics = document.querySelectorAll('.lyrics p');
+        const playPauseButton = document.getElementById('play-pause');
+        const midiAudio = document.getElementById('midi-audio');
+        let isPlaying = false;
+
+        playPauseButton.addEventListener('click', () => {
+            if (isPlaying) {
+                cd.style.animationPlayState = 'paused';
+                lyrics.forEach(lyric => lyric.style.animationPlayState = 'paused');
+                playPauseButton.textContent = '播放';
+                clearInterval(leafInterval);
+                midiAudio.pause();
+            } else {
+                cd.style.animationPlayState = 'running';
+                lyrics.forEach(lyric => lyric.style.animationPlayState = 'running');
+                playPauseButton.textContent = '暂停';
+                leafInterval = setInterval(createLeaf, 1000);
+                midiAudio.play();
+            }
+            isPlaying = !isPlaying;
+        });
+
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.classList.add('willow-leaf');
+            leaf.style.left = Math.random() * window.innerWidth + 'px';
+            const randomRotation = Math.random() * 360;
+            leaf.style.transform = `rotate(${randomRotation}deg)`;
+            const randomDuration = Math.random() * 5 + 5;
+            leaf.style.animation = `fall ${randomDuration}s linear infinite`;
+            document.body.appendChild(leaf);
+            setTimeout(() => {
+                leaf.remove();
+            }, randomDuration * 1000);
+        }
+    </script>
+</body>
+
+</html>
